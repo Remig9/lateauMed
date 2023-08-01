@@ -27,6 +27,7 @@ import * as Permissions from "expo-permissions";
 import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { ToastLong } from "../helper/toast";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -156,14 +157,26 @@ const editFunction=()=>{
 }
 
   const create = async () => {
-    let Add = {
+    let Add2 = {
       id: medicationReminders.length + 1,
       name: name,
       description: description,
       time: time,
       dosage: dosage,
       take: null,
-      date: dateSelected,
+      
+    };
+
+    console.log("details to create rimainder", Add2);
+    if(name !='' && description !='' && time !='' && dosage !=''){
+    let Add = {
+      id: medicationReminders.length + 1,
+      name: name,
+      description: description,
+      time: Number(time),
+      dosage: dosage,
+      take: false,
+      
     };
 
     console.log("details to create rimainder", Add);
@@ -174,9 +187,14 @@ const editFunction=()=>{
     console.warn("checking>> > medicationReminder", medicationReminders);
     var last = medicationReminders;
     setMedicationReminders(medicationReminders);
+    schedulePushNotification(Number(time), name, description, dosage)
+    setModalAdd(false)
     setRefresh(!refresh);
     emptyStates();
-    schedulePushNotification2("sec", name, description, dosage, time, date);
+   
+  }else{
+    ToastLong('All fields required')
+  }
   };
 
   const Delete = async (item) => {
@@ -246,11 +264,12 @@ const cancel=()=>{
     name,
     description,
     dosage,
-    time,
-    date
+   
   ) {
-    var datetime_in = "06/30/2017 7:56 AM";
-    var datetime_out = "06/30/2017 5:16 PM";
+   console.warn('Yes>> seconds',seconds)
+   console.warn('Yes>> name',name)
+   console.warn('Yes>> description',description)
+   console.warn('Yes>> dosage',dosage)
     await Notifications.scheduleNotificationAsync({
       content: {
         title: `${name}`,
@@ -517,7 +536,7 @@ const cancel=()=>{
             <Text
               style={{ color: "#FFFFFF", fontSize: 18, fontWeight: "bold" }}
             >
-              {see ? "******" : "\u20A6 50000"}
+              {see ? "******" : "\u20A6 50630"}
             </Text>
           </Container>
         </Container>
@@ -613,11 +632,12 @@ const cancel=()=>{
                   }}
                   multiline={true}
                   placeholder="Dose:"
+                  keyboardType="numeric"
                   onChangeText={(value)=>setDosage(value)}
                   placeholderTextColor={"gray"}
                 ></TextInput>
               </Container>
-              <TouchWrap onPress={()=>setShowTimeModal(true)}>
+            
               <Container marginTop={2} width={90} horizontalAlignment="center">
                 <TextInput
                   style={{
@@ -631,16 +651,18 @@ const cancel=()=>{
                     height:45
                   }}
                   multiline={true}
-                  placeholder="Time"
+                  placeholder="Enter time in seconds"
                   value={time}
-                  placeholderTextColor={"gray"}
-                  editable={false}
+                  keyboardType="numeric"
+                  placeholderTextColor={"gray"}                                                                                                             
+                  editable={true}
+                  onChangeText={(value)=>setTime(value)}
                 ></TextInput>
               </Container>
-</TouchWrap>
 
 
-<TouchWrap onPress={()=>setShowDateModal(true)}>
+
+{/* <TouchWrap onPress={()=>setShowDateModal(true)}>
               <Container marginTop={2} width={90} horizontalAlignment="center">
                 <TextInput
                   style={{
@@ -660,7 +682,7 @@ const cancel=()=>{
                   editable={false}
                 ></TextInput>
               </Container>
-              </TouchWrap>
+              </TouchWrap> */}
               <Container marginTop={2} width={90} horizontalAlignment="center">
                 <TextInput
                   style={{
@@ -882,7 +904,7 @@ const cancel=()=>{
                 ></TextInput>
               </Container>
 
-<TouchWrap onPress={()=>setShowTimeModal(true)}>
+
               <Container marginTop={2} width={90} horizontalAlignment="center">
                 <TextInput
                   style={{
@@ -898,36 +920,20 @@ const cancel=()=>{
                   multiline={true}
                   placeholder="Time"
                   value={time}
+                  keyboardType="numeric"
                   placeholderTextColor={"gray"}
-                  editable={false}
+                  editable={true}
                 ></TextInput>
               </Container>
-              </TouchWrap>
-
-              {/* {showTimeModal ? (
-          <DateTimePicker
-            testID="dateTimePicker"
-            mode={'time'}
-            is24Hour={true}
             
-            onChange={(value) => timeFormat(value.nativeEvent.timestamp)}
-          />
-        ):null}
-              {showDateModal && (
+
+          
+   {/* {showDateModal && (
           <DateTimePicker
             testID="dateTimePicker"
             mode={'date'}
-            is24Hour={true}
-            minimumDate={new Date()}
-            maximumDate={new Date(2023, 10, 20)}
-            onChange={(value) => dateFormat(value)}
-          />
-        )} */}
-   {showDateModal && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            mode={'date'}
-            is24Hour={true}
+            
+            value={new Date()}
             minimumDate={new Date()}
             maximumDate={new Date(2023, 10, 20)}
             onChange={(value) => dateFormat(value)}
@@ -938,13 +944,14 @@ const cancel=()=>{
           <DateTimePicker
             testID="dateTimePicker"
             mode={'time'}
+            value={new Date()}
             is24Hour={true}
             onChange={(value) => timeFormat(value.nativeEvent.timestamp)}
           />
-        )}
+        )} */}
       
-<TouchWrap onPress={()=>setShowDateModal(true)}>
-              <Container marginTop={2} width={90} horizontalAlignment="center">
+
+              {/* <Container marginTop={2} width={90} horizontalAlignment="center">
                 <TextInput
                   style={{
                     padding: 1,
@@ -962,8 +969,8 @@ const cancel=()=>{
                   placeholderTextColor={"gray"}
                   editable={false}
                 ></TextInput>
-              </Container>
-              </TouchWrap>
+              </Container> */}
+              
               <Container marginTop={2} width={90} horizontalAlignment="center">
                 <TextInput
                   style={{
