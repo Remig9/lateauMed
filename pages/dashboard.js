@@ -234,20 +234,7 @@ const editFunction=()=>{
     };
   }, [medicationReminders, setMedicationReminders]);
 
-  async function schedulePushNotification2(
-    seconds,
-    name,
-    description,
-    dosage,
-    time,
-    date
-  ) {
-    var datetime_in = "06/30/2017 7:56 AM";
-    var datetime_out = "06/30/2017 5:16 PM";
-    console.log("date", date);
-    console.log("time", time);
-    console.log("date", date);
-  }
+
 
 const cancel=()=>{
   setName(details.name);
@@ -266,16 +253,18 @@ const cancel=()=>{
     dosage,
    
   ) {
-   console.warn('Yes>> seconds',seconds)
-   console.warn('Yes>> name',name)
-   console.warn('Yes>> description',description)
-   console.warn('Yes>> dosage',dosage)
+ 
     await Notifications.scheduleNotificationAsync({
+      // content: {
+      //   title: `${name}`,
+      //   description: `${description}`,
+      //   dosage: dosage,
+      //   data: { data: "It works" },
+      // },
       content: {
-        title: `${name}`,
-        description: `${description}`,
-        dosage: dosage,
-        data: { data: "It works" },
+        title: `${name} time to take your ${dosage} dose drug`,
+        body: `${description}`,
+        data: { data: 'It works like mad' },
       },
       trigger: { seconds: seconds },
     });
@@ -544,7 +533,7 @@ const cancel=()=>{
           <Container
             marginTop={2}
             width={87}
-            marginLeft={5}
+            marginLeft={5}                                                                                                                                
             verticalAlignment="center"
             horizontalAlignment="flex-end"
           >
