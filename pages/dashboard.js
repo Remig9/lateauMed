@@ -255,12 +255,6 @@ const cancel=()=>{
   ) {
  
     await Notifications.scheduleNotificationAsync({
-      // content: {
-      //   title: `${name}`,
-      //   description: `${description}`,
-      //   dosage: dosage,
-      //   data: { data: "It works" },
-      // },
       content: {
         title: `${name} time to take your ${dosage} dose drug`,
         body: `${description}`,
@@ -273,7 +267,7 @@ const cancel=()=>{
   async function registerForPushNotificationsAsync() {
     let token;
     console.log("token at start", token);
-    if (Constants.isDevice) {
+    if (Constants.isDevice) {   
       const { status: existingStatus } = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
       );
